@@ -1,0 +1,103 @@
+# Publishes the theme to the Inkdrop registry whenever main carries a
+# package.json version that the registry does not have yet, then tags it.
+#
+# Release flow: bump "version" in package.json on a branch, merge to main.
+# Nothing happens on merges that leave the version alone.
+#
+# Secrets (Settings → Secrets and variables → Actions):
+#   INKDROP_ACCESS_KEY_ID      left half of the access key from Inkdrop
+#   INKDROP_SECRET_ACCESS_KEY  right half (the key is shown as id:secret)
+name: publish
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: publish-${{ github.ref }}
+  cancel-in-progress: false
+
+env:
+  INKDROP_ACCESS_KEY_ID: ${{ secrets.INKDROP_ACCESS_KEY_ID }}
+  INKDROP_SECRET_ACCESS_KEY: ${{ secrets.INKDROP_SECRET_ACCESS_KEY }}
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    # Fork PRs cannot see secrets, so the dry run only covers same-repo PRs.
+    if: >-
+      github.event_name != 'pull_request' ||
+      github.event.pull_request.head.repo.full_name == github.repository
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Check secrets
+        run: |
+          if [ -z "$INKDROP_ACCESS_KEY_ID" ] || [ -z "$INKDROP_SECRET_ACCESS_KEY" ]; then
+            echo "::error::INKDROP_ACCESS_KEY_ID / INKDROP_SECRET_ACCESS_KEY secrets are not set"
+            exit 1
+          fi
+
+      - name: Install
+        run: |
+          npm ci
+          npm install -g @inkdropapp/ipm-cli
+
+      - name: Read versions
+        id: versions
+        run: |
+          name=$(node -p "require('./package.json').name")
+          local_version=$(node -p "require('./package.json').version")
+          # `ipm show` exits 1 with a 404 for a package that was never published.
+          published=$(ipm show "$name" 2>/dev/null | sed -n 's/.*Latest version: //p' || true)
+          echo "name=$name"                   >> "$GITHUB_OUTPUT"
+          echo "local=$local_version"         >> "$GITHUB_OUTPUT"
+          echo "published=${published:-none}" >> "$GITHUB_OUTPUT"
+          echo "$name: local $local_version, registry ${published:-none}"
+
+      - name: Dry run (pull request)
+        if: github.event_name == 'pull_request'
+        run: ipm publish --dry-run
+
+      - name: Publish
+        if: >-
+          github.event_name != 'pull_request' &&
+          steps.versions.outputs.local != steps.versions.outputs.published
+        run: ipm publish
+
+      - name: Tag and release
+        if: >-
+          github.event_name != 'pull_request' &&
+          steps.versions.outputs.local != steps.versions.outputs.published
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: v${{ steps.versions.outputs.local }}
+        run: |
+          if git ls-remote --exit-code --tags origin "refs/tags/$TAG" >/dev/null; then
+            echo "$TAG already exists on origin, skipping tag"
+          else
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            git tag -a "$TAG" -m "$TAG"
+            git push origin "refs/tags/$TAG"
+          fi
+          gh release view "$TAG" >/dev/null 2>&1 || \
+            gh release create "$TAG" --title "$TAG" --generate-notes
+
+      - name: Nothing to publish
+        if: >-
+          github.event_name != 'pull_request' &&
+          steps.versions.outputs.local == steps.versions.outputs.published
+        run: echo "${{ steps.versions.outputs.name }}@${{ steps.versions.outputs.local }} is already on the registry"
