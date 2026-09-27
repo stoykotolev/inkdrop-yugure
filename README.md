@@ -10,6 +10,21 @@ as solid fills.
 The same palette drives the author's Neovim, tmux, Alacritty and lazygit
 configs, so notes and code look alike.
 
+## Gallery
+
+Alerts, one accent per kind — note foam, tip teal, important iris, warning
+gold, caution love:
+
+![Alerts](./docs/alerts.png)
+
+Code blocks and links — rose keywords, teal classes, gold strings, foam links:
+
+![Syntax highlighting](./docs/syntax.png)
+
+Tables, inline code and kbd chips:
+
+![Tables and inline styling](./docs/table.png)
+
 ## Palette
 
 | role     | hex       | used for                                  |
