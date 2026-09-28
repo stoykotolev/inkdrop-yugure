@@ -1,36 +1,252 @@
 @layer theme.ui {
   /*
-   * inkdrop-yugure — Inkdrop UI theme.
+   * Yūgure — semantic UI overrides for Inkdrop v6.
    *
-   * Override Inkdrop's semantic CSS variables to restyle the app chrome (page,
-   * sidebar, note list, editor, inputs, …).
-   * Check out https://github.com/inkdropapp/css/blob/main/ui.css for available variables.
+   * Chrome stays close to the editor ground, as in the nvim statusline and
+   * tmux bar: sidebar overlay → note list surface → editor base. Accents
+   * are used as text, never as solid fills.
    */
+
   :root {
-    /* Brand */
-    --primary-color: var(--color-blue-500);
+    /*-------------------
+      Brand Colors
+    --------------------*/
+    --primary-color: hsl(var(--yugure-foam) / 90%);
+    --secondary-color: hsl(var(--yugure-subtle) / 80%);
 
-    /* Page */
-    --page-background: var(--color-neutral-50);
-    --text-color: var(--color-neutral-600);
+    /*-------------------
+      Form Input
+    --------------------*/
+    --input-background: hsl(var(--yugure-base));
+    --input-color: hsl(var(--yugure-text));
+    --input-placeholder-color: hsl(var(--yugure-muted));
+    --input-placeholder-focus-color: hsl(var(--yugure-subtle));
 
-    /* Links */
-    --link-hover-color: var(--color-blue-700);
+    /*-------------------
+      Focused Input
+    --------------------*/
+    --focused-form-border-color: hsl(var(--yugure-foam) / 60%);
+    --focused-form-muted-border-color: hsl(var(--yugure-foam) / 60%);
+    --focused-outline-color: hsl(var(--yugure-foam) / 25%);
+    --input-focus-border-color: hsl(var(--yugure-foam) / 60%);
 
-    /* Borders — a token with alpha via the --hsl-* companion */
-    --border-color: hsl(var(--hsl-neutral-500) / 15%);
+    /*-------------------
+      Page
+    --------------------*/
+    --page-background: hsl(var(--yugure-base));
+    --text-color: hsl(var(--yugure-text));
 
-    /* Inputs */
-    --input-background: var(--color-neutral-100);
-    --input-focus-border-color: var(--color-blue-500);
+    /*-------------------
+      Links
+    --------------------*/
+    --link-color: hsl(var(--yugure-foam));
+    --link-hover-color: hsl(var(--hsl-cyan-400));
 
-    /* Sidebar */
-    --sidebar-background: var(--color-neutral-100);
+    /*-------------------
+      Highlighted Text
+    --------------------*/
+    --highlight-background: hsl(var(--yugure-search-bg));
+    --highlight-color: hsl(var(--yugure-text));
+    --input-highlight-background: hsl(var(--yugure-med));
+    --input-highlight-color: hsl(var(--yugure-text));
 
-    /* Note list */
-    --note-list-bar-background: var(--color-neutral-50);
+    /*-------------------
+      Emotive Colors
+    --------------------*/
+    --info-color: hsl(var(--yugure-foam));
+    --warning-color: hsl(var(--yugure-gold));
+    --positive-color: hsl(var(--yugure-teal));
+    --negative-color: hsl(var(--yugure-love));
 
-    /* Editor */
-    --editor-background: var(--color-neutral-50);
+    /*-------------------
+      Neutral Text
+    --------------------*/
+    --unselected-text-color: hsl(var(--yugure-subtle));
+    --selected-text-color: hsl(var(--yugure-text));
+
+    /*-------------------
+      Borders — inactive borders vanish, active ones are mid-grey (high)
+    --------------------*/
+    --border-color: hsl(var(--yugure-high) / 50%);
+    --strong-border-color: hsl(var(--yugure-high));
+    --solid-border-color: hsl(var(--yugure-high));
+    --selected-border-color: hsl(var(--yugure-foam) / 60%);
+
+    /*-------------------
+      Button
+    --------------------*/
+    --button-background: hsl(var(--yugure-med) / 80%) none;
+    --button-text-color: hsl(var(--yugure-text));
+    --button-hover-background-color: hsl(var(--yugure-high) / 70%);
+    --basic-button-hover-background: hsl(var(--yugure-med) / 60%);
+    --primary-button-background-color: hsl(var(--yugure-foam));
+    --primary-button-text-color: hsl(var(--yugure-base));
+    --positive-button-background-color: hsl(var(--yugure-teal));
+    --positive-button-text-color: hsl(var(--yugure-base));
+    --negative-button-background-color: hsl(var(--yugure-love));
+    --negative-button-text-color: hsl(var(--yugure-base));
+
+    /*-------------------
+      Elements
+    --------------------*/
+    --kbd-background: hsl(var(--yugure-med) / 60%);
+    --kbd-color: hsl(var(--yugure-iron));
+    --kbd-border-color: hsl(var(--yugure-high));
+    --scrollbar-track-background: transparent;
+    --scrollbar-thumb-background: hsl(var(--yugure-high));
+
+    /*-------------------
+      Header
+    --------------------*/
+    --header-text-color: hsl(var(--yugure-gold));
+
+    /*-------------------
+      Segment
+    --------------------*/
+    --segment-background: hsl(var(--yugure-surface));
+    --secondary-segment-background: hsl(var(--yugure-overlay) / 70%);
+    --grouped-segment-hover-background: hsl(var(--yugure-med) / 60%);
+    --piled-segments-background: hsl(var(--yugure-surface));
+
+    /*-------------------
+      Form
+    --------------------*/
+    --form-select-background: hsl(var(--yugure-base));
+
+    /*-------------------
+      Menu
+    --------------------*/
+    --menu-background: hsl(var(--yugure-surface));
+    --menu-item-text-color: hsl(var(--yugure-iron));
+    --menu-hover-item-background: hsl(var(--yugure-med));
+    --menu-hover-item-text-color: hsl(var(--yugure-text));
+    --menu-active-item-background: hsl(var(--yugure-med));
+    --menu-active-item-text-color: hsl(var(--yugure-text));
+    --vertical-menu-background: hsl(var(--yugure-surface) / 80%);
+    --tabular-menu-active-background: none hsl(var(--yugure-med));
+    --tabular-menu-text-color: hsl(var(--yugure-subtle));
+    --tabular-menu-active-color: hsl(var(--yugure-text));
+
+    /*-------------------
+      Popup
+    --------------------*/
+    --popup-background: hsl(var(--yugure-surface));
+    --popup-color: hsl(var(--yugure-text));
+    --popup-border-color: hsl(var(--yugure-high));
+
+    /*-------------------
+      Table
+    --------------------*/
+    --table-header-background: hsl(var(--yugure-med) / 40%);
+    --table-header-color: hsl(var(--yugure-rose));
+
+    /*-------------------
+      Dropdown
+    --------------------*/
+    --dropdown-menu-background: hsl(var(--yugure-surface));
+    --dropdown-menu-border-color: hsl(var(--yugure-high));
+    --dropdown-menu-item-color: hsl(var(--yugure-iron));
+    --dropdown-hovered-item-background: hsl(var(--yugure-med));
+    --dropdown-hovered-item-color: hsl(var(--yugure-text));
+    --dropdown-active-item-background: hsl(var(--yugure-med));
+    --dropdown-active-item-color: hsl(var(--yugure-text));
+    --dropdown-selected-background: hsl(var(--yugure-med));
+    --dropdown-selected-color: hsl(var(--yugure-text));
+    --inline-dropdown-menu-background: hsl(var(--yugure-surface) / 80%);
+
+    /*-------------------
+      Modal
+    --------------------*/
+    --modal-box-header-background: hsl(var(--yugure-overlay));
+    --modal-box-header-color: hsl(var(--yugure-text));
+    --modal-box-content-background: hsl(var(--yugure-surface));
+    --modal-box-actions-background: hsl(var(--yugure-surface));
+
+    /*-------------------
+      Side Bar — overlay, like the tmux status bar
+    --------------------*/
+    --sidebar-background: hsl(var(--yugure-overlay));
+    --sidebar-border-right: 1px solid hsl(var(--yugure-high) / 40%);
+    --sidebar-menu-item-color: hsl(var(--yugure-iron));
+    --sidebar-menu-active-item-color: hsl(var(--yugure-text));
+    --sidebar-menu-item-active-background: hsl(var(--yugure-med));
+    --sidebar-menu-section-color: hsl(var(--yugure-muted));
+    --sidebar-menu-section-separator-color: hsl(var(--yugure-high) / 50%);
+    --sidebar-menu-action-color: hsl(var(--yugure-subtle));
+    --sidebar-menu-action-hover-color: hsl(var(--yugure-foam));
+    --sidebar-sync-status-view-background: hsl(var(--yugure-surface) / 60%);
+    --sidebar-sync-status-view-border-top: 1px solid hsl(var(--yugure-high) / 40%);
+    --sidebar-sync-status-view-text-color: hsl(var(--yugure-subtle));
+    --sidebar-sync-status-view-detail-color: hsl(var(--yugure-muted));
+    --sidebar-scrollbar-thumb-background: hsl(var(--yugure-high));
+    --sidebar-scrollbar-track-background: transparent;
+
+    /*-------------------
+      Note List Bar — surface, between sidebar and editor
+    --------------------*/
+    --note-list-bar-background: hsl(var(--yugure-surface));
+    --note-list-bar-border-right: 1px solid hsl(var(--yugure-high) / 40%);
+    --note-list-bar-section-header-background: hsl(var(--yugure-overlay));
+    --note-list-bar-section-header-text-color: hsl(var(--yugure-subtle));
+    --note-list-bar-pinned-section-header-background: hsl(var(--yugure-overlay));
+    --note-list-view-item-header-color: hsl(var(--yugure-text));
+    --note-list-view-item-color: hsl(var(--yugure-subtle));
+    --note-list-view-item-date-color: hsl(var(--yugure-muted));
+    --note-list-view-item-separator-border: 1px solid hsl(var(--yugure-high) / 35%);
+    --note-list-view-item-selected-background: hsl(var(--yugure-med) / 60%);
+    --note-list-view-item-active-background: hsl(var(--yugure-med));
+    --note-list-view-item-active-color: hsl(var(--yugure-text));
+    --note-list-view-item-inactive-background: hsl(var(--yugure-overlay));
+    --note-search-bar-background: hsl(var(--yugure-surface));
+    --note-search-bar-input-background: hsl(var(--yugure-base));
+
+    /*-------------------
+      Editor
+    --------------------*/
+    --editor-background: hsl(var(--yugure-base));
+    --editor-floating-actions-background: hsl(var(--yugure-base) / 70%);
+    --editor-drawer-background: hsl(var(--yugure-surface) / 85%);
+    --editor-drawer-border-left: 1px solid hsl(var(--yugure-high) / 40%);
+    --editor-header-title-input-background: transparent;
+    --header-note-menu-background: hsl(var(--yugure-surface));
+    --header-note-menu-color: hsl(var(--yugure-subtle));
+
+    /*-------------------
+      Notifications
+    --------------------*/
+    --notification-item-background: hsl(var(--yugure-overlay) / 90%);
+
+    /*-------------------
+      Preferences
+    --------------------*/
+    --preferences-sidebar-background: hsl(var(--yugure-overlay));
+    --preferences-sidebar-item-active-background: hsl(var(--yugure-med));
+    --preferences-view-background: hsl(var(--yugure-base));
+
+    /*-------------------
+      Note Status — mirrors nvim diagnostics: info foam, warn gold,
+      success teal, error love
+    --------------------*/
+    --note-status-active: hsl(var(--yugure-foam));
+    --note-status-onhold: hsl(var(--yugure-gold));
+    --note-status-completed: hsl(var(--yugure-teal));
+    --note-status-dropped: hsl(var(--yugure-love));
+  }
+
+  /*-------------------
+    Acrylic background window
+  --------------------*/
+
+  :root:has(body.acrylic-window) {
+    --page-background: transparent;
+    --sidebar-background: hsl(var(--yugure-overlay) / 70%);
+    --note-list-bar-background: hsl(var(--yugure-surface) / 80%);
+    --editor-background: hsl(var(--yugure-base) / 90%);
+    --inline-dropdown-menu-background: hsl(var(--yugure-surface));
+    --vertical-menu-background: hsl(var(--yugure-surface));
+  }
+
+  :root:has(body.acrylic-window.platform-win32) {
+    --page-background: hsl(var(--yugure-base) / 40%);
   }
 }

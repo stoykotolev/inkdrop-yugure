@@ -1,27 +1,146 @@
 @layer theme.preview {
   /*
-   * inkdrop-yugure — Inkdrop Markdown preview theme.
-   *
-   * Override the CSS variables to restyle the rendered preview
-   * (links, code blocks, tables, headings, …).
-   * Check out https://github.com/inkdropapp/css/blob/main/markdown.css for available variables.
+   * Yūgure — rendered Markdown preview overrides for Inkdrop v6.
+   * Mirrors render-markdown.nvim: headings cycle the six accents, inline
+   * code is teal on surface, bullets rose, table heads rose.
    */
   :root {
-    /* Links */
-    --mde-preview-link-color: var(--color-blue-600);
+    --yugure-preview-surface: hsl(var(--yugure-overlay));
+    --yugure-preview-surface-subtle: hsl(var(--yugure-surface));
 
-    /* Code blocks */
-    --mde-preview-codeblock-background-color: hsl(var(--hsl-neutral-500) / 8%);
-    --mde-preview-codeblock-meta-background-color: var(--color-neutral-100);
-    --mde-preview-inline-code-text-color: var(--color-pink-600);
-    --mde-preview-inline-code-background-color: hsl(var(--hsl-neutral-500) / 8%);
+    /* Links — foam */
+    --mde-preview-link-color: hsl(var(--yugure-foam));
+
+    /* Code */
+    --mde-preview-codeblock-background-color: var(--yugure-preview-surface-subtle);
+    --mde-preview-codeblock-border-color: hsl(var(--yugure-high) / 40%);
+    --mde-preview-codeblock-text-color: hsl(var(--yugure-text));
+    --mde-preview-codeblock-meta-background-color: var(--yugure-preview-surface);
+    --mde-preview-codeblock-meta-text-color: hsl(var(--yugure-muted));
+    --mde-preview-inline-code-text-color: hsl(var(--yugure-teal));
+    --mde-preview-inline-code-border-width: 0;
+    --mde-preview-inline-code-border-color: transparent;
+    --mde-preview-inline-code-background-color: var(--yugure-preview-surface-subtle);
+
+    /* Headings — h1 rose, then gold, foam, teal, iris, subtle */
+    --mde-preview-heading-color: hsl(var(--yugure-gold));
+    --mde-preview-heading-muted-text-color: hsl(var(--yugure-muted));
+    --mde-preview-heading-border-color: hsl(var(--yugure-high) / 50%);
+    --mde-preview-heading-border-width: 1px;
+    --mde-preview-h1-border-width: 1px;
+
+    /* Prose */
+    --mde-preview-strong-color: hsl(var(--hsl-neutral-100));
+    --mde-preview-em-color: hsl(var(--yugure-text));
+    --mde-preview-blockquote-border-color: hsl(var(--yugure-high));
+    --mde-preview-blockquote-text-color: hsl(var(--yugure-muted));
+    --mde-preview-hr-background-color: hsl(var(--yugure-high) / 50%);
+    --mde-preview-hr-border-color: transparent;
+    --mde-preview-list-marker-color: hsl(var(--yugure-rose));
+    --mde-preview-list-marker-2-color: hsl(var(--yugure-rose));
+    --mde-preview-list-marker-3-color: hsl(var(--yugure-rose));
+    --mde-preview-task-list-checked-color: hsl(var(--yugure-teal));
+    --mde-preview-input-placeholder-color: hsl(var(--yugure-muted));
+    --mde-preview-footnote-border-color: hsl(var(--yugure-high));
+    --mde-preview-footnote-text-color: hsl(var(--yugure-subtle));
+    --mde-preview-footnote-highlight-border-color: hsl(var(--yugure-gold));
+    --mde-preview-metadata-section-background-color: var(--yugure-preview-surface-subtle);
+
+    /* kbd */
+    --mde-preview-kbd-background-color: hsl(var(--yugure-med) / 60%);
+    --mde-preview-kbd-border-color: hsl(var(--yugure-high));
+    --mde-preview-kbd-shadow-color: hsl(var(--yugure-base));
+    --mde-preview-kbd-text-color: hsl(var(--yugure-iron));
 
     /* Tables */
-    --mde-preview-table-head-text-color: var(--color-neutral-700);
-    --mde-preview-table-head-background-color: var(--color-neutral-100);
-    --mde-preview-table-row-stripe-background-color: hsl(var(--hsl-neutral-500) / 5%);
+    --mde-preview-table-head-text-color: hsl(var(--yugure-rose));
+    --mde-preview-table-head-background-color: var(--yugure-preview-surface);
+    --mde-preview-table-border-color: hsl(var(--yugure-high));
+    --mde-preview-table-row-border-color: hsl(var(--yugure-high) / 50%);
+    --mde-preview-table-row-background-color: transparent;
+    --mde-preview-table-row-stripe-background-color: var(--yugure-preview-surface-subtle);
 
-    /* Headings */
-    --mde-preview-heading-color: var(--color-yellow-500);
+    /* Images */
+    --mde-preview-image-background-color: var(--yugure-preview-surface-subtle);
+
+    /* Mark — gold on surface, like RenderMarkdownInlineHighlight */
+    --mde-preview-inline-mark-text-color: hsl(var(--yugure-gold));
+    --mde-preview-inline-mark-background-color: var(--yugure-preview-surface-subtle);
+    --mde-preview-inline-mark-underline-color: hsl(var(--yugure-gold));
+
+    /*
+     * Mermaid — nodes on med with foam borders, lines subtle, text body.
+     * Dark-only theme, so values are assigned directly.
+     */
+    --mermaid-text-color: hsl(var(--yugure-text));
+    --mermaid-line-color: hsl(var(--yugure-subtle));
+    --mermaid-node-text-color: hsl(var(--yugure-text));
+    --mermaid-node-background-color: hsl(var(--yugure-med));
+    --mermaid-node-border-color: hsl(var(--yugure-foam));
+    --mermaid-cluster-background-color: hsl(var(--yugure-surface));
+    --mermaid-cluster-border-color: hsl(var(--yugure-high));
+    --mermaid-edge-label-background-color: hsl(var(--yugure-base) / 85%);
+
+    /* Notes — gold */
+    --mermaid-note-background-color: hsl(var(--hsl-yellow-900));
+    --mermaid-note-border-color: hsl(var(--hsl-yellow-600));
+    --mermaid-note-text-color: hsl(var(--hsl-yellow-100));
+
+    /* Sequence label box — rose chip, neutral text (see nord note) */
+    --mermaid-label-box-background-color: hsl(var(--hsl-rose-900));
+    --mermaid-label-box-border-color: hsl(var(--yugure-rose));
+    --mermaid-label-text-color: hsl(var(--yugure-text));
+
+    /* Gantt */
+    --mermaid-section-background-color: hsl(var(--yugure-med) / 40%);
+    --mermaid-alt-section-background-color: hsl(var(--yugure-med) / 20%);
+    --mermaid-task-background-color: hsl(var(--hsl-cyan-800));
+    --mermaid-task-border-color: hsl(var(--yugure-foam));
+    --mermaid-active-task-background-color: hsl(var(--hsl-teal-800));
+    --mermaid-active-task-border-color: hsl(var(--yugure-teal));
+    --mermaid-done-task-background-color: hsl(var(--yugure-high) / 60%);
+    --mermaid-done-task-border-color: hsl(var(--yugure-muted));
+    --mermaid-crit-task-background-color: hsl(var(--hsl-red-800));
+    --mermaid-crit-task-border-color: hsl(var(--yugure-love));
+    --mermaid-grid-color: hsl(var(--yugure-high) / 50%);
+    --mermaid-today-line-color: hsl(var(--yugure-gold));
+
+    /* Seed palette — pie / git / quadrant / journey */
+    --mermaid-primary-color: hsl(var(--yugure-foam));
+    --mermaid-secondary-color: hsl(var(--yugure-iris));
+    --mermaid-tertiary-color: hsl(var(--yugure-teal));
+
+    /* Error */
+    --mermaid-error-background-color: hsl(var(--yugure-err-bg));
+    --mermaid-error-text-color: hsl(var(--yugure-love));
+
+    /* Event modeling — one yugure hue per element kind */
+    --mermaid-em-processor-background-color: hsl(var(--yugure-iris) / 30%);
+    --mermaid-em-processor-border-color: hsl(var(--yugure-iris));
+    --mermaid-em-read-model-background-color: hsl(var(--yugure-teal) / 30%);
+    --mermaid-em-read-model-border-color: hsl(var(--yugure-teal));
+    --mermaid-em-command-background-color: hsl(var(--yugure-foam) / 30%);
+    --mermaid-em-command-border-color: hsl(var(--yugure-foam));
+    --mermaid-em-event-background-color: hsl(var(--yugure-gold) / 30%);
+    --mermaid-em-event-border-color: hsl(var(--yugure-gold));
+
+    /* Wardley map */
+    --mermaid-wardley-evolution-color: hsl(var(--yugure-gold));
+
+    /* Cynefin */
+    --mermaid-cynefin-cliff-color: hsl(var(--yugure-love));
+    --mermaid-cynefin-complex-background-color: hsl(var(--yugure-teal) / 30%);
+    --mermaid-cynefin-complicated-background-color: hsl(var(--yugure-foam) / 30%);
+    --mermaid-cynefin-chaotic-background-color: hsl(var(--yugure-love) / 30%);
+    --mermaid-cynefin-clear-background-color: hsl(var(--yugure-gold) / 30%);
+    --mermaid-cynefin-confusion-background-color: hsl(var(--yugure-iris) / 30%);
   }
+
+  /* Per-level heading colours (the token only offers one heading colour) */
+  .mde-preview h1 { color: hsl(var(--yugure-rose)); }
+  .mde-preview h2 { color: hsl(var(--yugure-gold)); }
+  .mde-preview h3 { color: hsl(var(--yugure-foam)); }
+  .mde-preview h4 { color: hsl(var(--yugure-teal)); }
+  .mde-preview h5 { color: hsl(var(--yugure-iris)); }
+  .mde-preview h6 { color: hsl(var(--yugure-subtle)); }
 }
