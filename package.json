@@ -1,0 +1,29 @@
+{
+  "name": "yugure",
+  "version": "0.0.0",
+  "theme": true,
+  "themeAppearance": "dark",
+  "description": "A short description of your theme",
+  "styleSheets": [
+    "tokens.css",
+    "ui.css",
+    "syntax.css",
+    "preview.css"
+  ],
+  "keywords": [
+    "inkdrop",
+    "theme"
+  ],
+  "repository": "https://github.com/stoykotolev/inkdrop-yugure",
+  "author": "inkdropapp",
+  "license": "MIT",
+  "scripts": {
+    "prepublishOnly": "generate-palette"
+  },
+  "devDependencies": {
+    "@inkdropapp/theme-dev-helpers": "^0.6.1"
+  },
+  "engines": {
+    "inkdrop": "^6.0.0"
+  }
+}
