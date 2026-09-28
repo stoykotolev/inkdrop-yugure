@@ -18,7 +18,7 @@
   "author": "Stoyko Tolev <st.tolev@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "prepublishOnly": "generate-palette"
+    "prepublishOnly": "npx generate-palette"
   },
   "devDependencies": {
     "@inkdropapp/theme-dev-helpers": "^0.6.1"
