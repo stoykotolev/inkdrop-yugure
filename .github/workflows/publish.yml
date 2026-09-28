@@ -4,6 +4,9 @@
 # Release flow: bump "version" in package.json on a branch, merge to main.
 # Nothing happens on merges that leave the version alone.
 #
+# The ipm CLI reads credentials only from the OS keyring, so CI goes through
+# scripts/publish.mjs, which drives the core library with the env vars below.
+#
 # Secrets (Settings → Secrets and variables → Actions):
 #   INKDROP_ACCESS_KEY_ID      left half of the access key from Inkdrop
 #   INKDROP_SECRET_ACCESS_KEY  right half (the key is shown as id:secret)
@@ -51,31 +54,29 @@ jobs:
           fi
 
       - name: Install
-        run: |
-          npm ci
-          npm install -g @inkdropapp/ipm-cli
+        run: npm ci
 
       - name: Read versions
         id: versions
         run: |
           name=$(node -p "require('./package.json').name")
           local_version=$(node -p "require('./package.json').version")
-          # `ipm show` exits 1 with a 404 for a package that was never published.
-          published=$(ipm show "$name" 2>/dev/null | sed -n 's/.*Latest version: //p' || true)
+          # Prints "none" when the package was never published.
+          published=$(node scripts/publish.mjs check)
           echo "name=$name"                   >> "$GITHUB_OUTPUT"
           echo "local=$local_version"         >> "$GITHUB_OUTPUT"
-          echo "published=${published:-none}" >> "$GITHUB_OUTPUT"
-          echo "$name: local $local_version, registry ${published:-none}"
+          echo "published=$published"        >> "$GITHUB_OUTPUT"
+          echo "$name: local $local_version, registry $published"
 
       - name: Dry run (pull request)
         if: github.event_name == 'pull_request'
-        run: ipm publish --dry-run
+        run: node scripts/publish.mjs dry-run
 
       - name: Publish
         if: >-
           github.event_name != 'pull_request' &&
           steps.versions.outputs.local != steps.versions.outputs.published
-        run: ipm publish
+        run: node scripts/publish.mjs publish
 
       - name: Tag and release
         if: >-
