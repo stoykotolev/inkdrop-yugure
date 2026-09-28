@@ -26,6 +26,8 @@ concurrency:
 env:
   INKDROP_ACCESS_KEY_ID: ${{ secrets.INKDROP_ACCESS_KEY_ID }}
   INKDROP_SECRET_ACCESS_KEY: ${{ secrets.INKDROP_SECRET_ACCESS_KEY }}
+  # The ipm core library logs through `debug`; without this it is silent.
+  DEBUG: ipm:*,-ipm:debug
 
 jobs:
   publish:
@@ -54,7 +56,16 @@ jobs:
           fi
 
       - name: Install
-        run: npm ci
+        run: |
+          npm ci
+          # generate-palette renders the theme in headless Chrome; make sure the
+          # browser is present regardless of npm's install-script policy.
+          npx puppeteer browsers install chrome
+
+      - name: Generate palette
+        run: |
+          npm run palette
+          git status --short palette.json
 
       - name: Read versions
         id: versions
