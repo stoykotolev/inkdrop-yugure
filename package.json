@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "theme": true,
   "themeAppearance": "dark",
-  "description": "A short description of your theme",
+  "description": "Yūgure (夕暮れ) — a quiet twilight dark theme with six muted accents, one job each",
   "styleSheets": [
     "tokens.css",
     "ui.css",
@@ -15,7 +15,7 @@
     "theme"
   ],
   "repository": "https://github.com/stoykotolev/inkdrop-yugure",
-  "author": "inkdropapp",
+  "author": "Stoyko Tolev <st.tolev@gmail.com>",
   "license": "MIT",
   "scripts": {
     "prepublishOnly": "generate-palette"
