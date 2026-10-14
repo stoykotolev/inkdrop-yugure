@@ -45,10 +45,10 @@
     /*-------------------
       Highlighted Text
     --------------------*/
-    --highlight-background: hsl(var(--yugure-search-bg));
-    --highlight-color: hsl(var(--yugure-text));
-    --input-highlight-background: hsl(var(--yugure-med));
-    --input-highlight-color: hsl(var(--yugure-text));
+    --highlight-background: hsl(var(--yugure-foam) / 30%);
+    --highlight-color: hsl(var(--hsl-neutral-50));
+    --input-highlight-background: hsl(var(--yugure-foam) / 30%);
+    --input-highlight-color: hsl(var(--hsl-neutral-50));
 
     /*-------------------
       Emotive Colors

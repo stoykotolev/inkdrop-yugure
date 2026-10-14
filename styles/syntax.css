@@ -14,8 +14,12 @@
     --editor-foreground-color: hsl(var(--yugure-text));
     --editor-background-color: hsl(var(--yugure-base));
     --editor-caret-color: hsl(var(--yugure-text));
-    --editor-selection-background: hsl(var(--yugure-med));
-    --editor-focused-selection-background: hsl(var(--yugure-med));
+    /* Selection: a foam tint instead of a grey step, so it reads as a
+       selection rather than a second cursor line, with the text lifted to
+       the brightest neutral so it stays legible on top. */
+    --editor-selection-background: hsl(var(--yugure-foam) / 20%);
+    --editor-focused-selection-background: hsl(var(--yugure-foam) / 30%);
+    --editor-selection-foreground: hsl(var(--hsl-neutral-50));
     --editor-active-line-background-color: hsl(var(--yugure-low));
     --editor-special-char-color: hsl(var(--yugure-faint));
     --editor-spelling-error-color: hsl(var(--yugure-love));
@@ -69,8 +73,10 @@
     --editor-selection-match-outline: none;
     --editor-search-match-background-color: hsl(var(--yugure-search-bg));
     --editor-search-match-outline: none;
-    --editor-search-match-selected-background-color: hsl(var(--yugure-gold));
-    --editor-search-match-selected-outline: none;
+    /* Translucent gold + outline: Inkdrop has no foreground variable for the
+       current match, so a solid gold fill left the text unreadable. */
+    --editor-search-match-selected-background-color: hsl(var(--yugure-gold) / 40%);
+    --editor-search-match-selected-outline: 1px solid hsl(var(--yugure-gold));
 
     --editor-placeholder-color: hsl(var(--yugure-muted));
     --editor-nes-ghost-color: hsl(var(--yugure-muted));
